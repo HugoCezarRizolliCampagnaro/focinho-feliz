@@ -1,0 +1,173 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Focinho Feliz — Ração no pote, carinho na rua</title>
+<meta name="description" content="Resgatamos, alimentamos e cuidamos de cachorros, gatos e outros bichinhos de rua. Doe por Pix e acompanhe tudo com foto, vídeo e prestação de contas.">
+<link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fredoka:wght@500;600;700&family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,700&display=swap">
+<link rel="stylesheet" href="assets/style.css">
+</head>
+<body data-page="home">
+<header id="site-header"></header>
+
+<main id="topo">
+<section class="hero">
+<div class="container">
+  <div class="hero-text stack">
+    <span class="hero-tag"><svg class="icon icon-fill" viewBox="0 0 24 24" aria-hidden="true" style="width:16px;height:16px"><ellipse cx="6" cy="10" rx="2" ry="2.6"/><ellipse cx="10" cy="6" rx="2" ry="2.6"/><ellipse cx="14" cy="6" rx="2" ry="2.6"/><ellipse cx="18" cy="10" rx="2" ry="2.6"/><path d="M12 11c-3 0-6 4-6 6.5 0 2 1.6 2.5 3 2.5 1.2 0 2-.6 3-.6s1.8.6 3 .6c1.4 0 3-.5 3-2.5C18 15 15 11 12 11z"/></svg>Resgate independente</span>
+    <h1>Ração no pote, carinho na rua.</h1>
+    <p class="lead" style="max-width:520px">Nós resgatamos, alimentamos e cuidamos de cachorros, gatos e outros bichinhos de rua. Você ajuda com qualquer valor e acompanha tudo de perto, com foto e vídeo de cada compra.</p>
+    <div class="row" style="gap:12px">
+      <a class="btn btn-accent" href="#doar"><svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 20s-7-4.4-7-10a4 4 0 0 1 7-2.6A4 4 0 0 1 19 10c0 5.6-7 10-7 10z"/></svg>Doar agora</a>
+      <a class="btn btn-outline" href="bichos.html">Conhecer os bichos<svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
+    </div>
+    <ul class="hero-checks">
+      <li><svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg>Fotos e vídeos reais</li>
+      <li><svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg>Prestação de contas todo mês</li>
+      <li><svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg>Doação por Pix em segundos</li>
+    </ul>
+  </div>
+  <div class="hero-media">
+    <!-- Troque por <div class="photo hero-photo"><img src="assets/fotos/hero.jpg" alt="..."></div> quando tiver a foto -->
+    <div class="photo hero-photo tint-adotado" role="img" aria-label="Foto de um bichinho resgatado em breve">
+      <svg class="icon" viewBox="0 0 24 24" aria-hidden="true" style="width:44px;height:44px"><path d="M4 8h3l2-3h6l2 3h3v11H4z"/><circle cx="12" cy="13" r="3.5"/></svg>
+      <span style="font-size:18px">Foto em breve</span>
+      <span style="font-size:15px;font-weight:500;max-width:260px">Um resgatado já recuperado, brincando ou dormindo de barriga pra cima</span>
+    </div>
+    <div class="float-card float-meta">
+      <span style="font-size:13px;font-weight:700;color:var(--muted)">Meta de ração do mês</span>
+      <span style="font-family:var(--display);font-size:28px;font-weight:700;line-height:1" data-meta-pct>0%</span>
+      <div class="bar"><span data-meta-bar style="width:0"></span></div>
+    </div>
+  </div>
+</div>
+</section>
+
+<section class="bg-butter" aria-labelledby="meta-titulo">
+<div class="container row" style="padding-top:56px;padding-bottom:56px;align-items:center;gap:32px 56px">
+  <div class="stack" style="flex:1 1 360px;min-width:0;gap:10px">
+    <h2 id="meta-titulo" data-meta-title style="font-size:clamp(1.8rem,3vw,2.4rem)">Meta do mês</h2>
+    <p class="muted">Cada real que entra vira ração, remédio ou castração, e aparece aqui no site.</p>
+  </div>
+  <div class="stack" style="flex:2 1 480px;min-width:0;gap:12px">
+    <div class="row" style="justify-content:space-between;align-items:baseline;gap:12px">
+      <span style="font-family:var(--display);font-size:22px;font-weight:600" data-meta-got></span>
+      <span class="muted" style="font-weight:700" data-meta-left></span>
+    </div>
+    <div class="bar bar-big" role="progressbar" aria-label="Progresso da meta do mês" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0" data-meta-bar-wrap><span data-meta-bar style="width:0"></span></div>
+  </div>
+</div>
+</section>
+
+<section id="doar" class="section" aria-labelledby="doar-titulo">
+<div class="container stack" style="gap:32px">
+  <div class="stack" style="gap:10px;max-width:640px">
+    <h2 id="doar-titulo" class="h2">Escolha como ajudar</h2>
+    <p class="muted">Todo mês ou uma vez só. Todo valor ajuda, e você vê no que ele virou.</p>
+  </div>
+  <div class="donate-wrap">
+    <div class="donate-card">
+      <div class="segmented" role="group" aria-label="Frequência da doação">
+        <button type="button" id="freq-mensal" aria-pressed="true">Todo mês</button>
+        <button type="button" id="freq-unica" aria-pressed="false">Uma vez só</button>
+      </div>
+      <p id="mensal-note" class="muted" style="display:flex;gap:10px;align-items:flex-start;font-size:15px;margin-top:-8px">
+        <svg class="icon" viewBox="0 0 24 24" aria-hidden="true" style="width:18px;height:18px;stroke:var(--teal);margin-top:3px"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="M3 7l9 6 9-6"/></svg>
+        Todo mês você recebe um Pix novo por e-mail pra doar de novo. Sem cobrança automática, e você pode parar quando quiser.
+      </p>
+      <div id="amounts" class="amounts" role="group" aria-label="Valor da doação"></div>
+      <div id="custom-wrap" class="field" hidden>
+        <label for="custom-value">Quanto você quer doar? <span>(mínimo <span id="min-label"></span>)</span></label>
+        <div id="custom-box" class="money-input">
+          <span aria-hidden="true">R$</span>
+          <input id="custom-value" type="number" inputmode="numeric" min="1" step="1" placeholder="0">
+        </div>
+        <span id="custom-error" class="error-text" role="alert" hidden></span>
+      </div>
+      <div class="impact">
+        <span class="impact-icon"><svg class="icon icon-fill" viewBox="0 0 24 24" aria-hidden="true"><ellipse cx="6" cy="10" rx="2" ry="2.6"/><ellipse cx="10" cy="6" rx="2" ry="2.6"/><ellipse cx="14" cy="6" rx="2" ry="2.6"/><ellipse cx="18" cy="10" rx="2" ry="2.6"/><path d="M12 11c-3 0-6 4-6 6.5 0 2 1.6 2.5 3 2.5 1.2 0 2-.6 3-.6s1.8.6 3 .6c1.4 0 3-.5 3-2.5C18 15 15 11 12 11z"/></svg></span>
+        <p id="impact" aria-live="polite"></p>
+      </div>
+    </div>
+    <aside class="summary" aria-label="Resumo da doação">
+      <h3 style="font-size:22px;font-weight:600">Resumo da doação</h3>
+      <div class="stack" style="gap:12px;font-size:16px">
+        <div class="summary-row"><span>Frequência</span><span id="sum-freq"></span></div>
+        <div class="summary-row"><span>Destino</span><span>Ração, remédio e castração</span></div>
+        <div style="height:1px;background:var(--ink-line)"></div>
+        <div class="summary-row" style="align-items:baseline"><span>Valor</span><span id="sum-value" class="summary-total"></span></div>
+      </div>
+      <a id="cta-pix" class="btn btn-accent" href="doar.html"><svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 20s-7-4.4-7-10a4 4 0 0 1 7-2.6A4 4 0 0 1 19 10c0 5.6-7 10-7 10z"/></svg><span id="cta-label">Doar com Pix</span></a>
+      <p style="font-size:14px;color:var(--muted-on-dark)">Pix na hora. Se quiser, seu nome entra no mural de quem ajudou.</p>
+    </aside>
+  </div>
+</div>
+</section>
+
+<section id="bichos" class="section bg-butter" aria-labelledby="bichos-titulo">
+<div class="container stack" style="gap:32px">
+  <div class="row" style="align-items:flex-end;justify-content:space-between;gap:16px">
+    <div class="stack" style="gap:10px;max-width:600px">
+      <h2 id="bichos-titulo" class="h2">Quem você está ajudando</h2>
+      <p class="muted">Cada bichinho tem nome, história e um final feliz em construção.</p>
+    </div>
+    <a href="bichos.html" style="display:inline-flex;align-items:center;gap:8px;min-height:44px;color:var(--ink);font-weight:700;text-underline-offset:4px">Ver todos os bichos<svg class="icon" viewBox="0 0 24 24" aria-hidden="true" style="width:18px;height:18px"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
+  </div>
+  <div id="preview-animais" class="grid-cards"></div>
+</div>
+</section>
+
+<section id="como-funciona" class="section bg-ink" aria-labelledby="como-titulo">
+<div class="container stack" style="gap:40px">
+  <h2 id="como-titulo" class="h2" style="max-width:640px">Como sua doação chega no bichinho</h2>
+  <ol class="steps">
+    <li><span class="step-num">1</span><h3>Nós encontramos e cuidamos</h3><p>Resgatamos, levamos ao veterinário e damos comida, abrigo e muito carinho.</p></li>
+    <li><span class="step-num">2</span><h3>Você doa pelo Pix</h3><p>Todo mês ou uma vez só, com o valor que couber no seu bolso.</p></li>
+    <li><span class="step-num">3</span><h3>Você vê o resultado</h3><p>Postamos fotos, vídeos e as notas de cada compra aqui no site.</p></li>
+  </ol>
+</div>
+</section>
+
+<section id="transparencia" class="section" aria-labelledby="transp-titulo">
+<div class="container row" style="gap:40px;align-items:flex-start">
+  <div class="stack" style="flex:1 1 440px;min-width:0;gap:24px">
+    <div class="stack" style="gap:10px">
+      <h2 id="transp-titulo" class="h2">Prestação de contas, sem mistério</h2>
+      <p class="muted">Todo mês mostramos quanto entrou e no que cada real foi gasto.</p>
+    </div>
+    <div class="box">
+      <div style="display:flex;align-items:center;gap:10px;font-weight:700"><svg class="icon" viewBox="0 0 24 24" aria-hidden="true" style="stroke:var(--teal)"><path d="M6 3h12v18l-3-2-3 2-3-2-3 2z"/><path d="M9 8h6M9 12h6"/></svg><span id="preview-mes">Relatório do mês</span></div>
+      <div id="preview-gastos" class="stack" style="gap:12px"></div>
+      <a href="contas.html" style="align-self:flex-start;display:inline-flex;align-items:center;min-height:44px;font-weight:700">Ver notas e comprovantes</a>
+    </div>
+  </div>
+  <div class="stack" style="flex:1 1 420px;min-width:0">
+    <div class="video" style="height:420px">
+      <span class="play"><svg class="icon icon-fill" viewBox="0 0 24 24" aria-hidden="true"><path d="M7 4.5v15l13-7.5z"/></svg></span>
+      <span style="font-family:var(--display);font-size:24px;font-weight:600">Vídeo da semana</span>
+      <span style="color:var(--muted-on-dark);max-width:300px">Em breve: a entrega da ração, um banho, um bicho indo pra casa nova</span>
+    </div>
+  </div>
+</div>
+</section>
+
+<section class="cta bg-accent" aria-labelledby="cta-titulo">
+<div class="container">
+  <div class="stack" style="gap:8px;max-width:620px">
+    <h2 id="cta-titulo">Qualquer valor enche um pote.</h2>
+    <p style="font-size:18px">Doe hoje e acompanhe o resultado aqui no site.</p>
+  </div>
+  <a class="btn btn-ink" href="#doar" style="min-height:60px;padding:0 32px"><svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 20s-7-4.4-7-10a4 4 0 0 1 7-2.6A4 4 0 0 1 19 10c0 5.6-7 10-7 10z"/></svg>Quero doar</a>
+</div>
+</section>
+</main>
+
+<footer id="site-footer"></footer>
+<script src="assets/data.js"></script>
+<script src="assets/app.js"></script>
+</body>
+</html>

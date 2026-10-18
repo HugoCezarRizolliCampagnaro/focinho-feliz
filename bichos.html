@@ -1,0 +1,78 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Os bichos — Focinho Feliz</title>
+<meta name="description" content="Conheça os bichinhos resgatados: quem está em recuperação, quem está pronto pra adoção e quem já ganhou um lar.">
+<link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fredoka:wght@500;600;700&family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,700&display=swap">
+<link rel="stylesheet" href="assets/style.css">
+</head>
+<body data-page="bichos">
+<header id="site-header"></header>
+
+<main>
+<section class="bg-butter" aria-labelledby="bichos-titulo">
+<div class="container stack" style="padding-top:56px;padding-bottom:40px;gap:28px">
+  <div class="stack" style="gap:10px;max-width:680px">
+    <h1 id="bichos-titulo" style="font-size:clamp(2.4rem,4.5vw,3.6rem);line-height:1.05">Conheça a turma</h1>
+    <p class="lead">Quem já foi ajudado e quem ainda precisa de você. Cada um tem nome, história e um final feliz em construção.</p>
+  </div>
+  <div class="stack" style="gap:14px">
+    <div class="row" role="group" aria-label="Filtrar por tipo" style="align-items:center;gap:10px">
+      <span style="font-weight:700;font-size:15px;min-width:76px">Tipo</span>
+      <button type="button" class="pill" data-tipo="todos">Todos</button>
+      <button type="button" class="pill" data-tipo="cachorro">Cachorros</button>
+      <button type="button" class="pill" data-tipo="gato">Gatos</button>
+      <button type="button" class="pill" data-tipo="outro">Outros</button>
+    </div>
+    <div class="row" role="group" aria-label="Filtrar por situação" style="align-items:center;gap:10px">
+      <span style="font-weight:700;font-size:15px;min-width:76px">Situação</span>
+      <button type="button" class="pill" data-status="todos">Todas</button>
+      <button type="button" class="pill" data-status="rec">Em recuperação</button>
+      <button type="button" class="pill" data-status="adocao">Pra adoção</button>
+      <button type="button" class="pill" data-status="adotado">Adotados</button>
+    </div>
+  </div>
+</div>
+</section>
+
+<section aria-label="Lista de bichos">
+<div class="container stack" style="padding-top:40px;padding-bottom:80px;gap:24px">
+  <p id="count" class="muted" style="font-weight:700" aria-live="polite"></p>
+  <div id="empty" class="stack" style="border:2px dashed var(--line-2);border-radius:28px;padding:48px 24px;align-items:center;gap:12px;text-align:center" hidden>
+    <h2 style="font-size:24px;font-weight:600">Nenhum bichinho por aqui ainda</h2>
+    <p class="muted">Tenta outro filtro. Logo logo tem novidade.</p>
+    <button type="button" id="clear" class="btn btn-outline btn-sm">Ver todos</button>
+  </div>
+  <div id="grid-animais" class="grid-cards"></div>
+</div>
+</section>
+
+<section class="cta bg-accent" aria-labelledby="avise-titulo">
+<div class="container">
+  <div class="stack" style="gap:8px;max-width:620px">
+    <h2 id="avise-titulo">Viu um bichinho precisando de ajuda?</h2>
+    <p style="font-size:18px">Manda uma foto e o local pra gente. Quanto mais cedo, melhor pra ele.</p>
+  </div>
+  <a id="avise-link" class="btn btn-ink" href="index.html" style="min-height:60px;padding:0 30px">Avisar a gente</a>
+</div>
+</section>
+</main>
+
+<footer id="site-footer"></footer>
+<script src="assets/data.js"></script>
+<script src="assets/app.js"></script>
+<script>
+  (function () {
+    var S = window.SITE, a = document.getElementById('avise-link');
+    if (S.whatsapp) { a.href = 'https://wa.me/' + S.whatsapp + '?text=' + encodeURIComponent('Oi! Vi um bichinho precisando de ajuda.'); a.target = '_blank'; a.rel = 'noopener'; a.textContent = 'Avisar pelo WhatsApp'; }
+    else if (S.instagram) { a.href = 'https://instagram.com/' + S.instagram; a.target = '_blank'; a.rel = 'noopener'; a.textContent = 'Avisar pelo Instagram'; }
+    else if (S.email) { a.href = 'mailto:' + S.email + '?subject=' + encodeURIComponent('Bichinho precisando de ajuda'); a.textContent = 'Avisar por e-mail'; }
+  })();
+</script>
+</body>
+</html>

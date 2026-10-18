@@ -1,0 +1,66 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Prestação de contas — Focinho Feliz</title>
+<meta name="description" content="Quanto entrou de doação, no que foi gasto e a nota de cada compra, mês a mês.">
+<link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fredoka:wght@500;600;700&family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,700&display=swap">
+<link rel="stylesheet" href="assets/style.css">
+</head>
+<body data-page="contas">
+<header id="site-header"></header>
+
+<main>
+<section class="bg-butter" aria-labelledby="contas-titulo">
+<div class="container stack" style="padding-top:56px;padding-bottom:40px;gap:28px">
+  <div class="stack" style="gap:10px;max-width:680px">
+    <h1 id="contas-titulo" style="font-size:clamp(2.4rem,4.5vw,3.6rem);line-height:1.05">Prestação de contas</h1>
+    <p class="lead">Cada real que entra aparece aqui: quanto chegou, no que foi gasto e a nota de cada compra.</p>
+  </div>
+  <div id="months" class="row" role="group" aria-label="Escolher mês" style="gap:10px"></div>
+</div>
+</section>
+
+<section aria-label="Resumo do mês">
+<div class="container tiles" style="padding-top:40px">
+  <div class="tile" style="background:var(--teal-soft)"><span class="tile-label" style="color:var(--teal)">Entrou em doações</span><span id="t-entrou" class="tile-value"></span><span id="t-doacoes" class="muted" style="font-size:14px"></span></div>
+  <div class="tile" style="background:var(--coral-soft)"><span class="tile-label" style="color:var(--coral)">Foi gasto</span><span id="t-gasto" class="tile-value"></span><span class="muted" style="font-size:14px">Detalhado logo abaixo</span></div>
+  <div class="tile bg-ink"><span class="tile-label" style="color:var(--muted-on-dark)">Sobrou pro próximo mês</span><span id="t-saldo" class="tile-value"></span><span style="font-size:14px;color:var(--muted-on-dark)">Fica guardado pros bichos</span></div>
+</div>
+</section>
+
+<section aria-label="Detalhes do mês">
+<div class="container row" style="padding-top:40px;padding-bottom:80px;gap:32px;align-items:flex-start">
+  <div class="box" style="flex:1 1 460px;min-width:0;border-radius:28px;padding:28px;gap:20px">
+    <h2 style="font-size:26px;font-weight:600">No que foi gasto</h2>
+    <div id="gastos" class="stack" style="gap:20px"></div>
+    <p class="muted" style="font-size:14px;padding-top:12px;border-top:1px solid var(--line)">A taxa do Pix é cobrada pela empresa de pagamento em cada doação. Mostramos ela também, pra ficar tudo às claras.</p>
+  </div>
+  <div class="stack" style="flex:1 1 420px;min-width:0;gap:20px">
+    <h2 style="font-size:26px;font-weight:600">Comprovantes e registros</h2>
+    <div id="receipts" class="receipts"></div>
+    <div id="video" class="video" style="height:280px"></div>
+  </div>
+</div>
+</section>
+
+<section class="cta bg-accent" aria-labelledby="cta-titulo">
+<div class="container">
+  <div class="stack" style="gap:8px;max-width:620px">
+    <h2 id="cta-titulo">Seu nome pode estar no próximo relatório.</h2>
+    <p style="font-size:18px">Qualquer valor ajuda, e você vê no que ele virou.</p>
+  </div>
+  <a class="btn btn-ink" href="index.html#doar" style="min-height:60px;padding:0 30px">Quero doar</a>
+</div>
+</section>
+</main>
+
+<footer id="site-footer"></footer>
+<script src="assets/data.js"></script>
+<script src="assets/app.js"></script>
+</body>
+</html>

@@ -1,0 +1,214 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex">
+<title>Doar com Pix — Focinho Feliz</title>
+<link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fredoka:wght@500;600;700&family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,700&display=swap">
+<link rel="stylesheet" href="assets/style.css">
+<style>body { background: var(--butter); }</style>
+</head>
+<body data-page="doar">
+<header id="site-header"></header>
+
+<main class="checkout">
+  <ol class="progress-steps" aria-label="Etapas da doação">
+    <li id="ps-1" class="done" aria-current="step">Seus dados</li>
+    <li id="ps-2">Pagar com Pix</li>
+    <li id="ps-3">Pronto</li>
+  </ol>
+
+  <!-- Etapa 1 -->
+  <section id="step-1" class="panel" aria-labelledby="dados-titulo">
+    <div class="stack" style="gap:6px">
+      <h1 id="dados-titulo" style="font-size:32px">Quase lá!</h1>
+      <p class="muted">Seus dados servem só pra gente te mandar o resultado da sua ajuda.</p>
+    </div>
+    <div class="amount-box">
+      <div class="stack">
+        <span style="font-size:14px;font-weight:700;color:var(--muted)">Sua doação</span>
+        <span style="font-family:var(--display);font-size:34px;font-weight:700;line-height:1.1"><span id="amount-label"></span><span id="freq-suffix" style="font-size:18px;font-weight:500"></span></span>
+      </div>
+      <a href="index.html#doar" style="display:inline-flex;align-items:center;min-height:44px;font-weight:700">Trocar valor</a>
+    </div>
+    <form id="form-dados" class="stack" style="gap:22px" novalidate>
+      <div class="field">
+        <label for="nome">Seu nome <span>(opcional)</span></label>
+        <input id="nome" name="nome" type="text" autocomplete="name" maxlength="80" placeholder="Como quer ser chamado">
+      </div>
+      <div class="field">
+        <label for="email">Seu e-mail <span id="email-hint">(opcional)</span></label>
+        <input id="email" name="email" type="email" autocomplete="email" maxlength="120" placeholder="voce@email.com">
+        <span id="email-error" class="error-text" role="alert" hidden>Coloca seu e-mail pra gente te mandar o Pix do próximo mês.</span>
+        <span id="email-mensal" class="muted" style="font-size:14px" hidden>Todo mês chega um Pix novo nesse e-mail. Dá pra cancelar quando quiser.</span>
+      </div>
+      <label class="check" for="mural"><input id="mural" name="mural" type="checkbox">Quero aparecer no mural de quem ajudou</label>
+      <div id="form-error" class="notice" role="alert" hidden></div>
+      <button id="btn-gerar" type="submit" class="btn btn-accent">Gerar Pix</button>
+    </form>
+  </section>
+
+  <!-- Etapa 2 -->
+  <section id="step-2" class="panel center" aria-labelledby="pix-titulo" hidden>
+    <div class="stack" style="gap:6px">
+      <h1 id="pix-titulo" style="font-size:30px">Pague <span data-amount></span> com Pix</h1>
+      <p class="muted">Abra o app do seu banco e escaneie o código, ou use o copia e cola.</p>
+    </div>
+    <div id="qr" class="qr" role="img" aria-label="QR Code do Pix"></div>
+    <div class="stack" style="width:100%;gap:8px;text-align:left">
+      <span style="font-weight:700;font-size:15px">Pix copia e cola</span>
+      <div class="copy-row">
+        <code id="copia-cola"></code>
+        <button type="button" id="btn-copiar">Copiar código</button>
+      </div>
+    </div>
+    <div class="waiting" aria-live="polite"><span class="dot"></span><span id="waiting-text">Aguardando pagamento. A página atualiza sozinha.</span></div>
+    <button type="button" id="btn-ja-paguei" class="btn btn-outline" style="width:100%">Já paguei</button>
+  </section>
+
+  <!-- Etapa 3 -->
+  <section id="step-3" class="panel center" aria-labelledby="ok-titulo" hidden>
+    <span class="ok-badge"><svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg></span>
+    <div class="stack" style="gap:8px">
+      <h1 id="ok-titulo" style="font-size:34px">Obrigado! Sua doação chegou.</h1>
+      <p class="muted">Seus <span data-amount></span> vão virar ração, remédio ou castração. Você vai ver no relatório do mês no que foram gastos.</p>
+    </div>
+    <div class="row" style="width:100%;gap:10px">
+      <a id="btn-share" class="btn btn-accent" style="flex:1 1 200px;font-size:17px" target="_blank" rel="noopener">Compartilhar no WhatsApp</a>
+      <a class="btn btn-outline" href="bichos.html" style="flex:1 1 200px;font-size:17px">Ver os bichos</a>
+    </div>
+    <a class="text-btn" href="index.html#doar" style="display:inline-flex;align-items:center">Fazer outra doação</a>
+  </section>
+
+  <p class="muted" style="display:flex;align-items:center;justify-content:center;gap:8px;font-size:14px;text-align:center"><svg class="icon" viewBox="0 0 24 24" aria-hidden="true" style="width:16px;height:16px"><rect x="5" y="10" width="14" height="10" rx="2"/><path d="M8 10V7a4 4 0 0 1 8 0v3"/></svg>Pagamento processado pela SigiloPay</p>
+</main>
+
+<script src="assets/data.js"></script>
+<script src="assets/app.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+<script>
+(function () {
+  var S = window.SITE, brl = window.FF.brl;
+  var params = new URLSearchParams(location.search);
+  var valor = parseInt(params.get('valor'), 10);
+  var mensal = params.get('mensal') === '1';
+  var POLL_MS = 5000, MAX_POLL_MS = 15 * 60 * 1000;
+  var txId = null, pollTimer = null, pollStart = 0;
+
+  function el(id) { return document.getElementById(id); }
+  function setStep(n) {
+    [1, 2, 3].forEach(function (i) {
+      el('step-' + i).hidden = i !== n;
+      el('ps-' + i).classList.toggle('done', i <= n);
+      if (i === n) el('ps-' + i).setAttribute('aria-current', 'step'); else el('ps-' + i).removeAttribute('aria-current');
+    });
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+
+  if (!Number.isFinite(valor) || valor < S.valorMinimo) {
+    el('step-1').innerHTML = '<h1 style="font-size:28px">Escolha um valor primeiro</h1><p class="muted">O valor mínimo é ' + brl(S.valorMinimo) + '.</p><a class="btn btn-accent" href="index.html#doar">Escolher valor</a>';
+    return;
+  }
+
+  var label = brl(valor, true);
+  el('amount-label').textContent = label;
+  el('freq-suffix').textContent = mensal ? '/mês' : '';
+  document.querySelectorAll('[data-amount]').forEach(function (s) { s.textContent = label; });
+  el('btn-gerar').textContent = 'Gerar Pix de ' + label;
+  if (mensal) {
+    el('email-hint').textContent = '(obrigatório pra doação mensal)';
+    el('email-mensal').hidden = false;
+  }
+
+  function showFormError(msg) { var e = el('form-error'); e.textContent = msg; e.hidden = !msg; }
+
+  el('form-dados').addEventListener('submit', function (ev) {
+    ev.preventDefault();
+    var email = el('email').value.trim();
+    var emailOk = /.+@.+\..+/.test(email);
+    var needEmail = mensal && !emailOk;
+    el('email-error').hidden = !needEmail;
+    el('email').classList.toggle('error', needEmail);
+    if (needEmail) { el('email').focus(); return; }
+    if (email && !emailOk) { el('email-error').textContent = 'Esse e-mail parece estar incompleto.'; el('email-error').hidden = false; return; }
+
+    var btn = el('btn-gerar');
+    btn.disabled = true; btn.textContent = 'Gerando Pix...';
+    showFormError('');
+
+    fetch('/api/pix/create', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ valor: valor, mensal: mensal, nome: el('nome').value.trim(), email: email, mural: el('mural').checked })
+    }).then(function (r) { return r.json().then(function (j) { return { ok: r.ok, status: r.status, data: j }; }); })
+      .then(function (res) {
+        if (res.status === 503) throw new Error('As doações pelo site abrem em breve. Enquanto isso, fala com a gente pelas redes sociais.');
+        if (!res.ok || !res.data.copiaECola) throw new Error(res.data.error || 'Não deu pra gerar o Pix agora. Tenta de novo em alguns segundos.');
+        txId = res.data.id;
+        el('copia-cola').textContent = res.data.copiaECola;
+        var qr = el('qr'); qr.innerHTML = '';
+        qr.hidden = !res.data.qrImage && !window.QRCode; // sem QR, fica só o copia e cola
+        if (res.data.qrImage) {
+          var img = new Image(); img.alt = ''; img.src = res.data.qrImage; qr.appendChild(img);
+        } else if (window.QRCode) {
+          new QRCode(qr, { text: res.data.copiaECola, width: 230, height: 230, colorDark: '#1E2A3A', colorLight: '#FFFFFF', correctLevel: QRCode.CorrectLevel.M });
+        }
+        setStep(2);
+        startPolling();
+      })
+      .catch(function (err) { showFormError(err.message || 'Algo deu errado. Tenta de novo.'); })
+      .finally(function () { btn.disabled = false; btn.textContent = 'Gerar Pix de ' + label; });
+  });
+
+  el('btn-copiar').addEventListener('click', function () {
+    var txt = el('copia-cola').textContent, b = this;
+    (navigator.clipboard ? navigator.clipboard.writeText(txt) : Promise.reject()).catch(function () {
+      var r = document.createRange(); r.selectNodeContents(el('copia-cola'));
+      var s = getSelection(); s.removeAllRanges(); s.addRange(r); document.execCommand('copy');
+    }).finally(function () {
+      b.textContent = 'Copiado!'; b.classList.add('copied');
+      setTimeout(function () { b.textContent = 'Copiar código'; b.classList.remove('copied'); }, 2500);
+    });
+  });
+
+  function check() {
+    if (!txId) return Promise.resolve();
+    return fetch('/api/pix/status?id=' + encodeURIComponent(txId))
+      .then(function (r) { return r.json(); })
+      .then(function (j) {
+        if (j.paid) { stopPolling(); setStep(3); }
+        else if (j.expired) { stopPolling(); el('waiting-text').textContent = 'Esse Pix expirou. Volta e gera um novo.'; }
+      }).catch(function () { /* tenta de novo no próximo ciclo */ });
+  }
+  function startPolling() {
+    pollStart = Date.now();
+    stopPolling();
+    pollTimer = setInterval(function () {
+      if (Date.now() - pollStart > MAX_POLL_MS) { stopPolling(); el('waiting-text').textContent = 'Ainda não recebemos. Se já pagou, toque em "Já paguei".'; return; }
+      check();
+    }, POLL_MS);
+  }
+  function stopPolling() { if (pollTimer) clearInterval(pollTimer); pollTimer = null; }
+
+  el('btn-ja-paguei').addEventListener('click', function () {
+    var b = this; b.disabled = true; b.textContent = 'Conferindo...';
+    check().finally(function () {
+      setTimeout(function () {
+        b.disabled = false; b.textContent = 'Já paguei';
+        if (!el('step-3').hidden) return;
+        el('waiting-text').textContent = 'Ainda não chegou. Às vezes leva alguns segundos, a página atualiza sozinha.';
+        if (!pollTimer) startPolling();
+      }, 600);
+    });
+  });
+
+  var shareText = 'Acabei de ajudar os bichinhos de rua do ' + S.nome + '. Dá pra doar qualquer valor por Pix: ' + location.origin;
+  el('btn-share').href = 'https://wa.me/?text=' + encodeURIComponent(shareText);
+})();
+</script>
+</body>
+</html>
