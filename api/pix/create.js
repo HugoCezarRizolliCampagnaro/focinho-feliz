@@ -1,11 +1,22 @@
 // POST /api/pix/create  →  gera uma cobrança Pix na SigiloPay
-// Corpo: { valor, mensal, nome, email, mural }
+// Corpo: { valor, mensal, nome, email, telefone, cpf, mural }
 // Resposta: { id, copiaECola, qrImage? }
 
 const { keys, pick, sigilo, readBody } = require('../_sigilopay');
 
 const MIN = Number(process.env.VALOR_MINIMO || 5);
 const MAX = 10000;
+
+function cpfValido(c) {
+  if (!/^\d{11}$/.test(c) || /^(\d)\1{10}$/.test(c)) return false;
+  const dv = (len) => {
+    let s = 0;
+    for (let i = 0; i < len; i++) s += Number(c[i]) * (len + 1 - i);
+    const r = (s * 10) % 11;
+    return r === 10 ? 0 : r;
+  };
+  return dv(9) === Number(c[9]) && dv(10) === Number(c[10]);
+}
 
 module.exports = async (req, res) => {
   res.setHeader('Cache-Control', 'no-store');
@@ -23,43 +34,42 @@ module.exports = async (req, res) => {
   }
   const nome = String(body.nome || '').trim().slice(0, 80);
   const email = String(body.email || '').trim().slice(0, 120);
+  const telefone = String(body.telefone || '').replace(/\D/g, '');
+  const cpf = String(body.cpf || '').replace(/\D/g, '');
   const mensal = body.mensal === true;
-  if (email && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
-    return res.status(400).json({ error: 'Esse e-mail parece estar incompleto.' });
-  }
-  if (mensal && !email) {
-    return res.status(400).json({ error: 'Na doação mensal, o e-mail é obrigatório.' });
-  }
 
-  const identifier = 'ff-' + Date.now() + '-' + Math.random().toString(36).slice(2, 8);
+  // A SigiloPay pede nome, e-mail, telefone e CPF de quem paga (mesmo formato do Origem Saúde).
+  if (nome.length < 2) return res.status(400).json({ error: 'Coloca seu nome.' });
+  if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) return res.status(400).json({ error: 'Esse e-mail parece estar incompleto.' });
+  if (telefone.length < 10 || telefone.length > 11) return res.status(400).json({ error: 'Confere o celular com DDD.' });
+  if (!cpfValido(cpf)) return res.status(400).json({ error: 'Confere o CPF.' });
 
-  // ⚠️ CONFERIR: estes nomes de campo precisam bater com o que a SigiloPay espera.
-  // Copie o formato exato da integração que já funciona no projeto Origem Saúde
-  // (inclusive se o valor vai em reais, como aqui, ou em centavos).
+  const identifier = 'ff-' + Date.now() + '-' + Math.random().toString(36).slice(2, 7);
+
+  // Formato igual ao da integração do Origem Saúde (valor em reais).
   const payload = {
     identifier,
     amount: valor,
-    client: {
-      name: nome || 'Doador anônimo',
-      email: email || undefined
-    },
-    metadata: { origem: 'focinho-feliz', mensal, mural: body.mural === true }
+    client: { name: nome, email, phone: telefone, document: cpf },
+    products: [{ id: mensal ? 'doacao-mensal' : 'doacao', name: mensal ? 'Doação mensal Focinho Feliz' : 'Doação Focinho Feliz', quantity: 1, price: valor }]
   };
 
   try {
     const r = await sigilo('/pix/receive', { method: 'POST', body: JSON.stringify(payload) });
     if (!r.ok) {
       console.error('SigiloPay create falhou', r.status, JSON.stringify(r.data).slice(0, 500));
-      return res.status(502).json({ error: 'Não deu pra gerar o Pix agora. Tenta de novo em alguns segundos.' });
+      const msg = r.status === 400 || r.status === 422 ? 'Confere seus dados e tenta de novo.' : 'Não deu pra gerar o Pix agora. Tenta de novo em alguns segundos.';
+      return res.status(502).json({ error: msg });
     }
     const d = r.data;
-    const id = pick(d, ['transactionId', 'id', 'transaction.id', 'data.id', 'data.transactionId']);
-    const copiaECola = pick(d, ['pix.code', 'pixCode', 'pix.copyPaste', 'qrCode', 'qrcode', 'pix.qrcode', 'data.pix.code', 'data.qrCode', 'emv', 'brCode']);
-    let qrImage = pick(d, ['pix.image', 'pix.base64', 'qrCodeImage', 'qrCodeBase64', 'data.pix.image', 'data.qrCodeBase64']);
+    const id = pick(d, ['transactionId', 'id', 'transaction.id', 'data.transactionId', 'data.id']);
+    const copiaECola = typeof d.pix === 'string' ? d.pix : pick(d, ['pix.code', 'pix.copyPaste', 'pix.copiaECola', 'pix.qrcode', 'pix.qrCode', 'pix.payload', 'pix.emv', 'pixCode', 'qrCode', 'qrcode', 'data.pix.code']);
+    let qrImage = pick(d, ['pix.base64', 'pix.image', 'pix.qrCodeBase64', 'pix.qrCodeImage', 'qrCodeBase64', 'data.pix.base64']);
     if (qrImage && !/^data:|^https:/.test(qrImage)) qrImage = 'data:image/png;base64,' + qrImage;
 
     if (!id || !copiaECola) {
-      console.error('Resposta da SigiloPay sem id/código', JSON.stringify(d).slice(0, 500));
+      // Mostra só os nomes dos campos (sem dados do doador) pra ajustar o "pick" acima se precisar.
+      console.error('Resposta da SigiloPay sem id/código. Campos:', Object.keys(d), d.pix && typeof d.pix === 'object' ? Object.keys(d.pix) : typeof d.pix);
       return res.status(502).json({ error: 'Não deu pra gerar o Pix agora. Tenta de novo em alguns segundos.' });
     }
     // Próxima fase: salvar { id, valor, nome, email, mensal, mural } no Supabase aqui.
