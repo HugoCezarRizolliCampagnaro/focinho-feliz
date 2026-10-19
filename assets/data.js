@@ -29,7 +29,7 @@ window.SITE = {
   // foto: caminho da imagem, ex: 'assets/fotos/thor.jpg' (vazio = espaço reservado)
   animais: [
     { nome: 'Gatinho sem nome (por enquanto)', tipo: 'gato', especie: 'Gato filhote', status: 'adocao', statusLabel: 'Procurando um lar', historia: 'Foi encontrado sozinho na rua, ainda filhote. Hoje está seguro e sendo cuidado, mas ainda precisa de ração e de um lar definitivo. Qualquer valor ajuda a encher o pote dele.', foto: 'assets/fotos/gatinho-sem-nome.jpg' },
-    { nome: 'Ninhada da casinha velha', tipo: 'cachorro', especie: 'Filhotes', status: 'rec', statusLabel: 'Em recuperação', historia: 'Encontramos esses filhotes abandonados numa casinha velha. A mãe não estava por perto, e eles não podiam ficar ali passando frio e fome. Agora estão protegidos, e pra crescerem saudáveis vão precisar de ração de filhote, vermífugo e vacinas.', foto: 'assets/fotos/ninhada-casinha-velha.jpg' }
+    { nome: 'Ninhada da casinha velha', tipo: 'cachorro', especie: 'Filhotes', status: 'rec', statusLabel: 'Em recuperação', historia: 'Encontramos esses filhotes abandonados numa casinha velha. A mãe não estava por perto, e eles não podiam ficar ali passando frio e fome. No meio deles tinha até um gatinho perdido, que veio junto. Agora estão protegidos, e pra crescerem saudáveis vão precisar de ração de filhote, vermífugo e vacinas.', foto: 'assets/fotos/ninhada-casinha-velha.jpg' }
   ],
 
   // Relatórios mensais (o primeiro é o mais recente)
