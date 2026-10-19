@@ -39,33 +39,33 @@ window.SITE = {
   ],
 
   // Relatórios mensais (o primeiro é o mais recente)
-  // comprovante: caminho da foto da nota, ex: 'assets/notas/out-racao.jpg'
+  // foto: foto da compra (sacos de ração, remédios...), ex: 'assets/compras/out-racao.jpg'
   relatorios: [
     {
       mes: 'Outubro', emAndamento: true, entrou: 960, doacoes: 41, video: '',
       gastos: [
-        { item: 'Ração', valor: 520, comprovante: '' },
-        { item: 'Vermífugo e antipulgas', valor: 96, comprovante: '' },
-        { item: 'Veterinário', valor: 150, comprovante: '' },
+        { item: 'Ração', valor: 520, foto: '' },
+        { item: 'Vermífugo e antipulgas', valor: 96, foto: '' },
+        { item: 'Veterinário', valor: 150, foto: '' },
         { item: 'Taxa do Pix', valor: 67.2, taxa: true }
       ]
     },
     {
       mes: 'Setembro', entrou: 1210, doacoes: 53, video: '',
       gastos: [
-        { item: 'Ração', valor: 610, comprovante: '' },
-        { item: 'Vermífugo e antipulgas', valor: 84, comprovante: '' },
-        { item: 'Veterinário', valor: 220, comprovante: '' },
-        { item: 'Castração', valor: 180, comprovante: '' },
+        { item: 'Ração', valor: 610, foto: '' },
+        { item: 'Vermífugo e antipulgas', valor: 84, foto: '' },
+        { item: 'Veterinário', valor: 220, foto: '' },
+        { item: 'Castração', valor: 180, foto: '' },
         { item: 'Taxa do Pix', valor: 84.7, taxa: true }
       ]
     },
     {
       mes: 'Agosto', entrou: 740, doacoes: 30, video: '',
       gastos: [
-        { item: 'Ração', valor: 450, comprovante: '' },
-        { item: 'Vermífugo e antipulgas', valor: 60, comprovante: '' },
-        { item: 'Veterinário', valor: 90, comprovante: '' },
+        { item: 'Ração', valor: 450, foto: '' },
+        { item: 'Vermífugo e antipulgas', valor: 60, foto: '' },
+        { item: 'Veterinário', valor: 90, foto: '' },
         { item: 'Taxa do Pix', valor: 51.8, taxa: true }
       ]
     }

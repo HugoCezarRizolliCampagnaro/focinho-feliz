@@ -15,7 +15,7 @@ Site de doações por Pix para bichinhos de rua. HTML/CSS/JS puro + funções se
 
 Tudo fica em **`assets/data.js`**: nome, cidade, redes, meta do mês, bichos e relatórios.
 Fotos: coloque em `assets/fotos/` e preencha o campo `foto` do bicho (ex: `assets/fotos/thor.jpg`).
-Notas fiscais: em `assets/notas/` e o campo `comprovante` do gasto.
+Fotos das compras: em `assets/compras/` e o campo `foto` do gasto (notas fiscais não vão pro site).
 
 > Os dados que vêm no arquivo são **exemplos**. Troque pelos reais antes de abrir as doações.
 

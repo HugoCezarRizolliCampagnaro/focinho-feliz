@@ -202,9 +202,9 @@
           <div class="row" style="justify-content:space-between;gap:12px"><span style="font-weight:500">${esc(g.item)}</span><span style="font-weight:700">${brl(g.valor, true)}</span></div>
           <div class="bar" style="height:12px"><span style="width:${Math.round((g.valor / max) * 100)}%;${g.taxa ? 'background:#9AA3B0' : ''}"></span></div>
         </div>`).join('');
-      $('#receipts').innerHTML = r.gastos.filter((g) => !g.taxa).map((g) => g.comprovante
-        ? `<a class="receipt photo" href="${esc(g.comprovante)}" target="_blank" rel="noopener" style="padding:0;border-style:solid"><img src="${esc(g.comprovante)}" alt="Nota: ${esc(g.item)}" loading="lazy"></a>`
-        : `<div class="receipt photo" role="img" aria-label="Nota de ${esc(g.item)} em breve">${ICON.receipt}<span style="font-size:14px">Nota: ${esc(g.item)}</span></div>`).join('');
+      $('#receipts').innerHTML = r.gastos.filter((g) => !g.taxa).map((g) => g.foto
+        ? `<a class="receipt photo" href="${esc(g.foto)}" target="_blank" rel="noopener" style="padding:0;border-style:solid"><img src="${esc(g.foto)}" alt="Compra: ${esc(g.item)}" loading="lazy"></a>`
+        : `<div class="receipt photo" role="img" aria-label="Foto da compra de ${esc(g.item)} em breve">${ICON.camera}<span style="font-size:14px">${esc(g.item)}</span></div>`).join('');
       const video = $('#video');
       if (r.video) {
         video.innerHTML = /youtube|youtu\.be/.test(r.video)
@@ -214,6 +214,12 @@
         video.innerHTML = `<span class="play">${ICON.play}</span><span style="font-family:var(--display);font-size:22px;font-weight:600">Vídeo da compra de ${esc(r.mes.toLowerCase())}</span><span style="color:var(--muted-on-dark);font-size:15px">Em breve: a ração chegando e os bichos comendo</span>`;
       }
     }
+    // "Quer ver alguma nota?" vira link pro contato que existir
+    const pedido = $('#nota-pedido');
+    const contato = S.whatsapp ? `https://wa.me/${esc(S.whatsapp)}?text=${encodeURIComponent('Oi! Queria ver uma nota da prestação de contas.')}`
+      : S.instagram ? `https://instagram.com/${esc(S.instagram)}`
+      : S.email ? `mailto:${esc(S.email)}` : '';
+    if (contato) pedido.innerHTML = `Quer ver alguma nota? <a href="${contato}"${contato.startsWith('http') ? ' target="_blank" rel="noopener"' : ''} style="font-weight:700">Chama a gente</a> que mostramos.`;
     months.addEventListener('click', (e) => {
       const b = e.target.closest('[data-i]');
       if (b) { idx = Number(b.dataset.i); render(); }
