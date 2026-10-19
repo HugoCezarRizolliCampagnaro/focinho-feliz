@@ -11,6 +11,10 @@ window.SITE = {
   whatsapp: '',  // ex: '5549999999999' (com DDI e DDD, só números)
   email: '',     // e-mail de contato do projeto
 
+  // Ligar quando estiverem prontos: lembrete mensal por e-mail e mural de doadores
+  doacaoMensal: false,
+  mural: false,
+
   valorMinimo: 5,
   valores: [10, 25, 50, 100],
   impactos: {

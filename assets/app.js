@@ -103,7 +103,9 @@
     $('[data-meta-left]').textContent = `faltam ${brl(Math.max(0, m.valor - m.arrecadado))}`;
 
     // Doação
-    const st = { mensal: true, amount: 25, custom: '' };
+    const st = { mensal: !!S.doacaoMensal, amount: 25, custom: '' };
+    $('#freq-group').hidden = !S.doacaoMensal;
+    $('#sum-freq-row').hidden = !S.doacaoMensal;
     const amountsEl = $('#amounts');
     amountsEl.innerHTML = S.valores.map((v) => `<button type="button" class="pill" data-amount="${v}">R$ ${v}</button>`).join('') +
       `<button type="button" class="pill small" data-amount="outro">Outro valor</button>`;

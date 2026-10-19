@@ -59,7 +59,7 @@
           <span class="error-text" data-err="cpf" role="alert" hidden>Confere o CPF.</span>
         </div>
       </div>
-      <label class="check" for="mural"><input id="mural" name="mural" type="checkbox">Quero aparecer no mural de quem ajudou</label>
+      <label id="mural-row" class="check" for="mural"><input id="mural" name="mural" type="checkbox">Quero aparecer no mural de quem ajudou</label>
       <div id="form-error" class="notice" role="alert" hidden></div>
       <button id="btn-gerar" type="submit" class="btn btn-accent">Gerar Pix</button>
     </form>
@@ -108,7 +108,7 @@
   var S = window.SITE, brl = window.FF.brl;
   var params = new URLSearchParams(location.search);
   var valor = parseInt(params.get('valor'), 10);
-  var mensal = params.get('mensal') === '1';
+  var mensal = !!S.doacaoMensal && params.get('mensal') === '1';
   var POLL_MS = 5000, MAX_POLL_MS = 15 * 60 * 1000;
   var txId = null, pollTimer = null, pollStart = 0;
 
@@ -133,6 +133,7 @@
   document.querySelectorAll('[data-amount]').forEach(function (s) { s.textContent = label; });
   el('btn-gerar').textContent = 'Gerar Pix de ' + label;
   if (mensal) el('email-mensal').hidden = false;
+  el('mural-row').hidden = !S.mural;
 
   function showFormError(msg) { var e = el('form-error'); e.textContent = msg; e.hidden = !msg; }
   function digits(s) { return s.replace(/\D/g, ''); }
@@ -183,7 +184,7 @@
     fetch('/api/pix/create', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ valor: valor, mensal: mensal, nome: nome, email: email, telefone: telefone, cpf: cpf, mural: el('mural').checked })
+      body: JSON.stringify({ valor: valor, mensal: mensal, nome: nome, email: email, telefone: telefone, cpf: cpf, mural: !!S.mural && el('mural').checked })
     }).then(function (r) { return r.json().then(function (j) { return { ok: r.ok, status: r.status, data: j }; }); })
       .then(function (res) {
         if (res.status === 503) throw new Error('As doações pelo site abrem em breve. Enquanto isso, fala com a gente pelas redes sociais.');

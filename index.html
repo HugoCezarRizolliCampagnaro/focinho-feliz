@@ -67,11 +67,11 @@
 <div class="container stack" style="gap:32px">
   <div class="stack" style="gap:10px;max-width:640px">
     <h2 id="doar-titulo" class="h2">Escolha como ajudar</h2>
-    <p class="muted">Todo mês ou uma vez só. Todo valor ajuda, e você vê no que ele virou.</p>
+    <p class="muted">Todo valor ajuda, e você vê no que ele virou.</p>
   </div>
   <div class="donate-wrap">
     <div class="donate-card">
-      <div class="segmented" role="group" aria-label="Frequência da doação">
+      <div id="freq-group" class="segmented" role="group" aria-label="Frequência da doação">
         <button type="button" id="freq-mensal" aria-pressed="true">Todo mês</button>
         <button type="button" id="freq-unica" aria-pressed="false">Uma vez só</button>
       </div>
@@ -96,13 +96,13 @@
     <aside class="summary" aria-label="Resumo da doação">
       <h3 style="font-size:22px;font-weight:600">Resumo da doação</h3>
       <div class="stack" style="gap:12px;font-size:16px">
-        <div class="summary-row"><span>Frequência</span><span id="sum-freq"></span></div>
+        <div id="sum-freq-row" class="summary-row"><span>Frequência</span><span id="sum-freq"></span></div>
         <div class="summary-row"><span>Destino</span><span>Ração, remédio e castração</span></div>
         <div style="height:1px;background:var(--ink-line)"></div>
         <div class="summary-row" style="align-items:baseline"><span>Valor</span><span id="sum-value" class="summary-total"></span></div>
       </div>
       <a id="cta-pix" class="btn btn-accent" href="doar.html"><svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 20s-7-4.4-7-10a4 4 0 0 1 7-2.6A4 4 0 0 1 19 10c0 5.6-7 10-7 10z"/></svg><span id="cta-label">Doar com Pix</span></a>
-      <p style="font-size:14px;color:var(--muted-on-dark)">Pix na hora. Se quiser, seu nome entra no mural de quem ajudou.</p>
+      <p style="font-size:14px;color:var(--muted-on-dark)">Pix na hora, direto pros bichos.</p>
     </aside>
   </div>
 </div>
@@ -126,7 +126,7 @@
   <h2 id="como-titulo" class="h2" style="max-width:640px">Como sua doação chega no bichinho</h2>
   <ol class="steps">
     <li><span class="step-num">1</span><h3>Nós encontramos e cuidamos</h3><p>Resgatamos, levamos ao veterinário e damos comida, abrigo e muito carinho.</p></li>
-    <li><span class="step-num">2</span><h3>Você doa pelo Pix</h3><p>Todo mês ou uma vez só, com o valor que couber no seu bolso.</p></li>
+    <li><span class="step-num">2</span><h3>Você doa pelo Pix</h3><p>Pelo Pix, com o valor que couber no seu bolso.</p></li>
     <li><span class="step-num">3</span><h3>Você vê o resultado</h3><p>Postamos fotos, vídeos e as notas de cada compra aqui no site.</p></li>
   </ol>
 </div>
