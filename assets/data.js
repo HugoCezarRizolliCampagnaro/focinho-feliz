@@ -22,7 +22,7 @@ window.SITE = {
   },
 
   // Meta do mês (por enquanto manual; depois vem do banco de dados)
-  meta: { mes: 'Outubro', valor: 1500, arrecadado: 960 },
+  meta: { mes: 'Outubro', valor: 1500, arrecadado: 0 },
 
   // status: 'rec' = em recuperação | 'adocao' = pronto pra adoção | 'adotado'
   // tipo: 'cachorro' | 'gato' | 'outro'
@@ -35,33 +35,8 @@ window.SITE = {
   // Relatórios mensais (o primeiro é o mais recente)
   // foto: foto da compra (sacos de ração, remédios...), ex: 'assets/compras/out-racao.jpg'
   relatorios: [
-    {
-      mes: 'Outubro', emAndamento: true, entrou: 960, doacoes: 41, video: '',
-      gastos: [
-        { item: 'Ração', valor: 520, foto: '' },
-        { item: 'Vermífugo e antipulgas', valor: 96, foto: '' },
-        { item: 'Veterinário', valor: 150, foto: '' },
-        { item: 'Taxa do Pix', valor: 67.2, taxa: true }
-      ]
-    },
-    {
-      mes: 'Setembro', entrou: 1210, doacoes: 53, video: '',
-      gastos: [
-        { item: 'Ração', valor: 610, foto: '' },
-        { item: 'Vermífugo e antipulgas', valor: 84, foto: '' },
-        { item: 'Veterinário', valor: 220, foto: '' },
-        { item: 'Castração', valor: 180, foto: '' },
-        { item: 'Taxa do Pix', valor: 84.7, taxa: true }
-      ]
-    },
-    {
-      mes: 'Agosto', entrou: 740, doacoes: 30, video: '',
-      gastos: [
-        { item: 'Ração', valor: 450, foto: '' },
-        { item: 'Vermífugo e antipulgas', valor: 60, foto: '' },
-        { item: 'Veterinário', valor: 90, foto: '' },
-        { item: 'Taxa do Pix', valor: 51.8, taxa: true }
-      ]
-    }
+    // Exemplo de gasto: { item: 'Ração', valor: 120, foto: 'assets/compras/out-racao.jpg' }
+    // Taxa do Pix: { item: 'Taxa do Pix', valor: 8.4, taxa: true }
+    { mes: 'Outubro', emAndamento: true, entrou: 0, doacoes: 0, video: '', gastos: [] }
   ]
 };

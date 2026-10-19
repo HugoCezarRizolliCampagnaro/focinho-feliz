@@ -156,8 +156,10 @@
     const r = S.relatorios[0];
     if (r) {
       $('#preview-mes').textContent = 'Relatório de ' + r.mes.toLowerCase();
-      $('#preview-gastos').innerHTML = r.gastos.filter((g) => !g.taxa).slice(0, 3)
-        .map((g) => `<div class="line-item"><span>${esc(g.item)}</span><span style="font-weight:700">${brl(g.valor, true)}</span></div>`).join('');
+      const prev = r.gastos.filter((g) => !g.taxa).slice(0, 3);
+      $('#preview-gastos').innerHTML = prev.length === 0
+        ? `<p class="muted">Ainda não teve gastos esse mês. As primeiras compras pros bichos vão aparecer aqui.</p>`
+        : prev.map((g) => `<div class="line-item"><span>${esc(g.item)}</span><span style="font-weight:700">${brl(g.valor, true)}</span></div>`).join('');
     }
   }
 
@@ -188,21 +190,27 @@
     let idx = 0;
     const months = $('#months');
     months.innerHTML = S.relatorios.map((r, i) => `<button type="button" class="pill" data-i="${i}">${esc(r.mes)}${r.emAndamento ? ' (em andamento)' : ''}</button>`).join('');
+    months.hidden = S.relatorios.length < 2; // seletor só aparece quando tiver mais de um mês
     function render() {
       const r = S.relatorios[idx];
       $$('#months .pill').forEach((b) => b.setAttribute('aria-pressed', String(Number(b.dataset.i) === idx)));
       const total = r.gastos.reduce((s, g) => s + g.valor, 0);
       const max = Math.max(1, ...r.gastos.map((g) => g.valor));
       $('#t-entrou').textContent = brl(r.entrou, true);
-      $('#t-doacoes').textContent = r.doacoes + ' doações recebidas';
+      $('#t-doacoes').textContent = r.doacoes === 0 ? 'Seja a primeira doação' : r.doacoes === 1 ? '1 doação recebida' : r.doacoes + ' doações recebidas';
       $('#t-gasto').textContent = brl(total, true);
       $('#t-saldo').textContent = brl(Math.max(0, r.entrou - total), true);
-      $('#gastos').innerHTML = r.gastos.map((g) => `
+      $('#gastos').innerHTML = r.gastos.length === 0
+        ? `<p class="muted">Ainda não teve gastos em ${esc(r.mes.toLowerCase())}. Cada compra pros bichos vai aparecer aqui, com o valor certinho.</p>`
+        : r.gastos.map((g) => `
         <div class="stack" style="gap:8px">
           <div class="row" style="justify-content:space-between;gap:12px"><span style="font-weight:500">${esc(g.item)}</span><span style="font-weight:700">${brl(g.valor, true)}</span></div>
           <div class="bar" style="height:12px"><span style="width:${Math.round((g.valor / max) * 100)}%;${g.taxa ? 'background:#9AA3B0' : ''}"></span></div>
         </div>`).join('');
-      $('#receipts').innerHTML = r.gastos.filter((g) => !g.taxa).map((g) => g.foto
+      const compras = r.gastos.filter((g) => !g.taxa);
+      $('#receipts').innerHTML = compras.length === 0
+        ? `<div class="receipt photo" role="img" aria-label="Fotos das compras em breve" style="grid-column:1/-1">${ICON.camera}<span style="font-size:14px">As fotos das compras aparecem aqui</span></div>`
+        : compras.map((g) => g.foto
         ? `<a class="receipt photo" href="${esc(g.foto)}" target="_blank" rel="noopener" style="padding:0;border-style:solid"><img src="${esc(g.foto)}" alt="Compra: ${esc(g.item)}" loading="lazy"></a>`
         : `<div class="receipt photo" role="img" aria-label="Foto da compra de ${esc(g.item)} em breve">${ICON.camera}<span style="font-size:14px">${esc(g.item)}</span></div>`).join('');
       const video = $('#video');
