@@ -1,6 +1,6 @@
 # Focinho Feliz
 
-Site de doações por Pix para bichinhos de rua. HTML/CSS/JS puro + funções serverless da Vercel (`api/`) para o Pix da SigiloPay.
+Site de doações por Pix para bichinhos de rua. HTML/CSS/JS puro + funções serverless da Vercel (`api/`) para o Pix do Asaas.
 
 ## Páginas
 
@@ -25,8 +25,8 @@ Em **Settings → Environment Variables** do projeto na Vercel:
 
 | Nome | Valor |
 |---|---|
-| `SIGILOPAY_PUBLIC_KEY` | chave pública da SigiloPay |
-| `SIGILOPAY_SECRET_KEY` | chave secreta da SigiloPay |
+| `ASAAS_API_KEY` | chave de API do Asaas (de teste ou de produção) |
+| `ASAAS_SANDBOX` | opcional: `true` força o ambiente de testes. Sem ela, chaves com `_hmlg_` usam o sandbox |
 | `VALOR_MINIMO` | opcional, padrão `5` |
 
 Sem as chaves, o botão de gerar Pix mostra "As doações pelo site abrem em breve".

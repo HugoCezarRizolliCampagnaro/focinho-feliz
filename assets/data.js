@@ -2,7 +2,7 @@
   DADOS DO SITE — edite aqui sem mexer no resto do código.
 
   ATENÇÃO: tudo abaixo é EXEMPLO. Troque pelos bichos, valores e relatórios
-  reais antes de liberar as doações (antes de colocar as chaves da SigiloPay na Vercel).
+  reais antes de liberar as doações (antes de colocar a chave do Asaas na Vercel).
 */
 window.SITE = {
   nome: 'Focinho Feliz',

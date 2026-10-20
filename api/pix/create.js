@@ -1,11 +1,14 @@
-// POST /api/pix/create  →  gera uma cobrança Pix na SigiloPay
+// POST /api/pix/create  →  gera uma cobrança Pix no Asaas
 // Corpo: { valor, mensal, nome, email, telefone, cpf, mural }
-// Resposta: { id, copiaECola, qrImage? }
+// Resposta: { id, copiaECola, qrImage }
+//
+// Passos no Asaas: acha (ou cria) o cliente pelo CPF → cria a cobrança Pix → pega o QR Code.
 
-const { keys, pick, sigilo, readBody } = require('../_sigilopay');
+const { apiKey, asaas, asaasError, readBody, hojeBR } = require('../_asaas');
 
 const MIN = Number(process.env.VALOR_MINIMO || 5);
 const MAX = 10000;
+const ERRO_GENERICO = 'Não deu pra gerar o Pix agora. Tenta de novo em alguns segundos.';
 
 function cpfValido(c) {
   if (!/^\d{11}$/.test(c) || /^(\d)\1{10}$/.test(c)) return false;
@@ -18,14 +21,37 @@ function cpfValido(c) {
   return dv(9) === Number(c[9]) && dv(10) === Number(c[10]);
 }
 
+async function clienteId({ nome, email, telefone, cpf }) {
+  const busca = await asaas('/customers?cpfCnpj=' + cpf + '&limit=1', { method: 'GET' });
+  const achado = busca.ok && busca.data && Array.isArray(busca.data.data) && busca.data.data[0];
+  if (achado && achado.id) return achado.id;
+
+  const novo = await asaas('/customers', {
+    method: 'POST',
+    body: JSON.stringify({
+      name: nome,
+      cpfCnpj: cpf,
+      email,
+      mobilePhone: telefone,
+      notificationDisabled: true // o próprio site mostra o Pix; o Asaas não manda e-mail de cobrança
+    })
+  });
+  if (!novo.ok || !novo.data.id) {
+    const e = new Error('cliente');
+    e.asaas = novo;
+    throw e;
+  }
+  return novo.data.id;
+}
+
 module.exports = async (req, res) => {
   res.setHeader('Cache-Control', 'no-store');
   if (req.method !== 'POST') {
     res.setHeader('Allow', 'POST');
     return res.status(405).json({ error: 'Método não permitido.' });
   }
-  // Sem as chaves na Vercel, o site mostra "doações abrem em breve".
-  if (!keys()) return res.status(503).json({ error: 'doacoes_fechadas' });
+  // Sem a chave na Vercel, o site mostra "doações abrem em breve".
+  if (!apiKey()) return res.status(503).json({ error: 'doacoes_fechadas' });
 
   const body = readBody(req);
   const valor = Number(body.valor);
@@ -38,44 +64,49 @@ module.exports = async (req, res) => {
   const cpf = String(body.cpf || '').replace(/\D/g, '');
   const mensal = body.mensal === true;
 
-  // A SigiloPay pede nome, e-mail, telefone e CPF de quem paga (mesmo formato do Origem Saúde).
   if (nome.length < 2) return res.status(400).json({ error: 'Coloca seu nome.' });
   if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) return res.status(400).json({ error: 'Esse e-mail parece estar incompleto.' });
   if (telefone.length < 10 || telefone.length > 11) return res.status(400).json({ error: 'Confere o celular com DDD.' });
   if (!cpfValido(cpf)) return res.status(400).json({ error: 'Confere o CPF.' });
 
-  const identifier = 'ff-' + Date.now() + '-' + Math.random().toString(36).slice(2, 7);
-
-  // Formato igual ao da integração do Origem Saúde (valor em reais).
-  const payload = {
-    identifier,
-    amount: valor,
-    client: { name: nome, email, phone: telefone, document: cpf },
-    products: [{ id: mensal ? 'doacao-mensal' : 'doacao', name: mensal ? 'Doação mensal Focinho Feliz' : 'Doação Focinho Feliz', quantity: 1, price: valor }]
-  };
-
   try {
-    const r = await sigilo('/pix/receive', { method: 'POST', body: JSON.stringify(payload) });
-    if (!r.ok) {
-      console.error('SigiloPay create falhou', r.status, JSON.stringify(r.data).slice(0, 500));
-      const msg = r.status === 400 || r.status === 422 ? 'Confere seus dados e tenta de novo.' : 'Não deu pra gerar o Pix agora. Tenta de novo em alguns segundos.';
-      return res.status(502).json({ error: msg });
-    }
-    const d = r.data;
-    const id = pick(d, ['transactionId', 'id', 'transaction.id', 'data.transactionId', 'data.id']);
-    const copiaECola = typeof d.pix === 'string' ? d.pix : pick(d, ['pix.code', 'pix.copyPaste', 'pix.copiaECola', 'pix.qrcode', 'pix.qrCode', 'pix.payload', 'pix.emv', 'pixCode', 'qrCode', 'qrcode', 'data.pix.code']);
-    let qrImage = pick(d, ['pix.base64', 'pix.image', 'pix.qrCodeBase64', 'pix.qrCodeImage', 'qrCodeBase64', 'data.pix.base64']);
-    if (qrImage && !/^data:|^https:/.test(qrImage)) qrImage = 'data:image/png;base64,' + qrImage;
+    const customer = await clienteId({ nome, email, telefone, cpf });
 
-    if (!id || !copiaECola) {
-      // Mostra só os nomes dos campos (sem dados do doador) pra ajustar o "pick" acima se precisar.
-      console.error('Resposta da SigiloPay sem id/código. Campos:', Object.keys(d), d.pix && typeof d.pix === 'object' ? Object.keys(d.pix) : typeof d.pix);
-      return res.status(502).json({ error: 'Não deu pra gerar o Pix agora. Tenta de novo em alguns segundos.' });
+    const cobranca = await asaas('/payments', {
+      method: 'POST',
+      body: JSON.stringify({
+        customer,
+        billingType: 'PIX',
+        value: valor,
+        dueDate: hojeBR(),
+        description: mensal ? 'Doação mensal Focinho Feliz' : 'Doação Focinho Feliz',
+        externalReference: 'ff-' + Date.now()
+      })
+    });
+    if (!cobranca.ok || !cobranca.data.id) {
+      console.error('Asaas: falha ao criar cobrança', cobranca.status, asaasError(cobranca.data));
+      return res.status(502).json({ error: ERRO_GENERICO });
     }
-    // Próxima fase: salvar { id, valor, nome, email, mensal, mural } no Supabase aqui.
-    return res.status(200).json({ id: String(id), copiaECola: String(copiaECola), qrImage: qrImage || null });
+    const id = cobranca.data.id;
+
+    const qr = await asaas('/payments/' + encodeURIComponent(id) + '/pixQrCode', { method: 'GET' });
+    if (!qr.ok || !qr.data.payload) {
+      console.error('Asaas: falha ao obter QR Code', qr.status, asaasError(qr.data));
+      return res.status(502).json({ error: ERRO_GENERICO });
+    }
+    const img = qr.data.encodedImage;
+    const qrImage = img ? (img.startsWith('data:') ? img : 'data:image/png;base64,' + img) : null;
+
+    // Próxima fase: salvar { id, valor, mensal, mural } no Supabase aqui.
+    return res.status(200).json({ id: String(id), copiaECola: String(qr.data.payload), qrImage });
   } catch (err) {
-    console.error('Erro ao chamar a SigiloPay', err);
-    return res.status(502).json({ error: 'Não deu pra gerar o Pix agora. Tenta de novo em alguns segundos.' });
+    if (err.asaas) {
+      const a = err.asaas;
+      console.error('Asaas: falha ao criar cliente', a.status, asaasError(a.data));
+      if (a.status === 400) return res.status(400).json({ error: 'Confere seus dados e tenta de novo.' });
+    } else {
+      console.error('Erro ao chamar o Asaas', err);
+    }
+    return res.status(502).json({ error: ERRO_GENERICO });
   }
 };
