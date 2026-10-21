@@ -90,17 +90,30 @@
       </article>`;
   }
 
+  // ---------- Total do mês (Asaas) ----------
+  // Devolve { mes, total, doacoes } ou null se o resumo não estiver disponível.
+  function resumoDoMes() {
+    return fetch('/api/resumo')
+      .then((r) => (r.ok ? r.json() : null))
+      .then((j) => (j && typeof j.total === 'number' ? j : null))
+      .catch(() => null);
+  }
+
   // ---------- Página inicial ----------
   function initHome() {
-    // Meta
+    // Meta: mostra o valor do data.js e depois troca pelo total real do mês, vindo do Asaas
     const m = S.meta;
-    const pct = Math.min(100, Math.round((m.arrecadado / Math.max(1, m.valor)) * 100));
-    $$('[data-meta-pct]').forEach((el) => (el.textContent = pct + '%'));
-    $$('[data-meta-bar]').forEach((el) => requestAnimationFrame(() => (el.style.width = pct + '%')));
-    $$('[data-meta-bar-wrap]').forEach((el) => el.setAttribute('aria-valuenow', pct));
-    $('[data-meta-title]').textContent = `Meta de ${m.mes.toLowerCase()}: ${brl(m.valor)} pra ração`;
-    $('[data-meta-got]').textContent = `${brl(m.arrecadado)} arrecadados`;
-    $('[data-meta-left]').textContent = `faltam ${brl(Math.max(0, m.valor - m.arrecadado))}`;
+    function pintarMeta(mes, arrecadado) {
+      const pct = Math.min(100, Math.round((arrecadado / Math.max(1, m.valor)) * 100));
+      $$('[data-meta-pct]').forEach((el) => (el.textContent = pct + '%'));
+      $$('[data-meta-bar]').forEach((el) => requestAnimationFrame(() => (el.style.width = pct + '%')));
+      $$('[data-meta-bar-wrap]').forEach((el) => el.setAttribute('aria-valuenow', pct));
+      $('[data-meta-title]').textContent = `Meta de ${mes.toLowerCase()}: ${brl(m.valor)} pra ração`;
+      $('[data-meta-got]').textContent = `${brl(arrecadado)} arrecadados`;
+      $('[data-meta-left]').textContent = `faltam ${brl(Math.max(0, m.valor - arrecadado))}`;
+    }
+    pintarMeta(m.mes, m.arrecadado);
+    resumoDoMes().then((r) => { if (r) pintarMeta(r.mes, r.total); });
 
     // Doação
     const st = { mensal: !!S.doacaoMensal, amount: 25, custom: '' };
@@ -235,6 +248,14 @@
       if (b) { idx = Number(b.dataset.i); render(); }
     });
     render();
+    // O mês em andamento pega "Entrou em doações" direto do Asaas
+    resumoDoMes().then((resumo) => {
+      const atual = S.relatorios[0];
+      if (!resumo || !atual || !atual.emAndamento || atual.mes.toLowerCase() !== resumo.mes) return;
+      atual.entrou = resumo.total;
+      atual.doacoes = resumo.doacoes;
+      render();
+    });
   }
 
   if (page === 'home') initHome();
