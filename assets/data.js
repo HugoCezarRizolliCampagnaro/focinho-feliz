@@ -24,8 +24,9 @@ window.SITE = {
     outro: 'ajuda no que os bichinhos mais precisarem no mês.'
   },
 
-  // Meta do mês (por enquanto manual; depois vem do banco de dados)
-  meta: { mes: 'Outubro', valor: 1500, arrecadado: 0 },
+  // Pote de ração: a barra soma as doações recebidas desde a data "desde".
+  // Comprou a ração? Troca "desde" pela data de hoje (AAAA-MM-DD) e a barra volta pra zero.
+  meta: { valor: 1500, desde: '2026-10-21', arrecadado: 0 },
 
   // status: 'rec' = em recuperação | 'adocao' = pronto pra adoção | 'adotado'
   // tipo: 'cachorro' | 'gato' | 'outro'

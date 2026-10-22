@@ -157,8 +157,8 @@
 
   // ---------- Total do mês (Asaas) ----------
   // Devolve { mes, total, doacoes } ou null se o resumo não estiver disponível.
-  function resumoDoMes() {
-    return fetch('/api/resumo')
+  function resumoDoMes(desde) {
+    return fetch('/api/resumo' + (desde ? '?desde=' + encodeURIComponent(desde) : ''))
       .then((r) => (r.ok ? r.json() : null))
       .then((j) => (j && typeof j.total === 'number' ? j : null))
       .catch(() => null);
@@ -168,17 +168,20 @@
   function initHome() {
     // Meta: mostra o valor do data.js e depois troca pelo total real do mês, vindo do Asaas
     const m = S.meta;
-    function pintarMeta(mes, arrecadado) {
+    function pintarMeta(arrecadado) {
       const pct = Math.min(100, Math.round((arrecadado / Math.max(1, m.valor)) * 100));
+      const cheio = arrecadado >= m.valor;
       $$('[data-meta-pct]').forEach((el) => (el.textContent = pct + '%'));
       $$('[data-meta-bar]').forEach((el) => requestAnimationFrame(() => (el.style.width = pct + '%')));
       $$('[data-meta-bar-wrap]').forEach((el) => el.setAttribute('aria-valuenow', pct));
-      $('[data-meta-title]').textContent = `Meta de ${mes.toLowerCase()}: ${brl(m.valor)} pra ração`;
+      $('[data-meta-title]').textContent = `Meta do pote de ração: ${brl(m.valor)}`;
       $('[data-meta-got]').textContent = `${brl(arrecadado)} arrecadados`;
-      $('[data-meta-left]').textContent = `faltam ${brl(Math.max(0, m.valor - arrecadado))}`;
+      $('[data-meta-left]').textContent = cheio
+        ? 'Esse pote já está garantido! O que entrar agora já começa o próximo.'
+        : `faltam ${brl(Math.max(0, m.valor - arrecadado))}`;
     }
-    pintarMeta(m.mes, m.arrecadado);
-    resumoDoMes().then((r) => { if (r) pintarMeta(r.mes, r.total); });
+    pintarMeta(m.arrecadado);
+    resumoDoMes(m.desde).then((r) => { if (r) pintarMeta(r.total); });
 
     // Doação
     const st = { mensal: !!S.doacaoMensal, amount: 25, custom: '' };
