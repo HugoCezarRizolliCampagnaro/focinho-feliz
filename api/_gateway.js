@@ -112,9 +112,8 @@ async function somarDoacoes(inicio, fim) {
         const ext = String(t.external_id_client || t.externalIdClient || t.external_id || '');
         resumoLog.push(status + '/' + (tipo || '-') + '/' + (ext ? ext.slice(0, 3) : 'sem-ext'));
         if (status !== 'PAID' || tipo === 'WITHDRAW') continue;
-        // Só conta o que veio do site ("ff-"). Se a ZuckPay não devolver a referência, conta mesmo assim
-        // (a conta é usada só pelo Focinho Feliz).
-        if (ext && !ext.startsWith('ff-')) continue;
+        // Conta toda venda paga da conta: a ZuckPay troca a referência "ff-" quando o Pix é pago,
+        // e essa conta é usada só pelo Focinho Feliz.
         total += Number(t.amount ?? t.valor ?? t.value) || 0;
         doacoes += 1;
       }
