@@ -96,23 +96,34 @@ async function somarDoacoes(inicio, fim) {
   let doacoes = 0;
 
   if (g === 'zuckpay') {
+    // Filtra no código (e não só na ZuckPay) pra não depender do formato exato dos filtros.
     let cursor;
+    const resumoLog = [];
     for (let pagina = 0; pagina < 60; pagina++) {
-      const query = { status: 'PAID', type: 'DEPOSIT', date_from: inicio, date_to: fim, limit: 50 };
+      const query = { date_from: inicio, date_to: fim, limit: 50 };
       if (cursor) query.cursor = cursor;
       const r = await zp.zuck('GET', '/v3/transactions', { query });
       if (!r.ok) throw new ErroGateway('ZuckPay lista ' + r.status + ': ' + zp.zuckError(r.data), r.status);
-      const lista = Array.isArray(r.data.transactions) ? r.data.transactions : [];
+      const lista = Array.isArray(r.data.transactions) ? r.data.transactions
+        : Array.isArray(r.data.data) ? r.data.data : [];
       for (const t of lista) {
-        if (String(t.external_id_client || '').startsWith('ff-')) {
-          total += Number(t.amount) || 0;
-          doacoes += 1;
-        }
+        const status = String(t.status || '').toUpperCase();
+        const tipo = String(t.type || '').toUpperCase();
+        const ext = String(t.external_id_client || t.externalIdClient || t.external_id || '');
+        resumoLog.push(status + '/' + (tipo || '-') + '/' + (ext ? ext.slice(0, 3) : 'sem-ext'));
+        if (status !== 'PAID' || tipo === 'WITHDRAW') continue;
+        // Só conta o que veio do site ("ff-"). Se a ZuckPay não devolver a referência, conta mesmo assim
+        // (a conta é usada só pelo Focinho Feliz).
+        if (ext && !ext.startsWith('ff-')) continue;
+        total += Number(t.amount ?? t.valor ?? t.value) || 0;
+        doacoes += 1;
       }
       const pag = r.data.pagination || {};
       if (!pag.has_more || !pag.next_cursor) break;
       cursor = pag.next_cursor;
     }
+    // Diagnóstico sem dados pessoais: status/tipo/prefixo da referência de cada transação.
+    console.log('Resumo ZuckPay ' + inicio + '..' + fim + ': ' + (resumoLog.join(', ') || 'nenhuma transação'));
     return { total: Math.round(total * 100) / 100, doacoes };
   }
 
