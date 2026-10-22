@@ -234,3 +234,15 @@ a:hover { color: #0F5545; }
   .hero-photo { height: 380px; }
   .float-meta { width: 190px; }
 }
+
+/* Votação de nome */
+.vote { display: flex; flex-direction: column; gap: 10px; padding: 14px; border-radius: 18px; background: var(--butter); margin-top: 4px; }
+.vote-title { font-family: var(--display); font-weight: 600; font-size: 17px; }
+.vote-opts { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px; }
+.vote-opts .pill { width: 100%; }
+.vote-opts .pill:hover { border-color: var(--ink); }
+.vote-row { display: flex; flex-direction: column; gap: 4px; font-size: 15px; font-weight: 500; }
+.vote-row.mine { font-weight: 700; }
+.vote-row small { font-weight: 500; color: var(--muted); }
+.vote-row .bar { height: 8px; background: var(--white); }
+.vote-note { font-size: 13px; color: var(--muted); }

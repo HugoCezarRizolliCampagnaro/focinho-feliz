@@ -58,7 +58,7 @@
       <div class="container">
         <div class="stack" style="gap:6px">
           <span class="footer-name">${esc(S.nome)}</span>
-          <span style="color:var(--muted-on-dark);font-size:15px">Resgate independente feito com carinho em ${esc(S.cidade)}.</span>
+          <span style="color:var(--muted-on-dark);font-size:15px">Resgate independente feito com carinho.</span>
         </div>
         <div class="footer-links">${links.join('')}</div>
       </div>`;
@@ -85,9 +85,74 @@
           </div>
           <h3>${esc(a.nome)}</h3>
           <p>${esc(a.historia)}</p>
+          ${a.votacao && a.id ? `<div class="vote" data-vote="${esc(a.id)}" hidden></div>` : ''}
           <div class="animal-actions">${actions}</div>
         </div>
       </article>`;
+  }
+
+  // ---------- Votação de nome ----------
+  const votoCache = {};
+  const lsGet = (k) => { try { return localStorage.getItem(k); } catch (_) { return null; } };
+  const lsSet = (k, v) => { try { localStorage.setItem(k, v); } catch (_) { /* sem storage, tudo bem */ } };
+
+  function pintarVoto(el, a, dados, aviso) {
+    const v = a.votacao;
+    const jaVotou = lsGet('ff-voto-' + a.id);
+    const total = dados.total || 0;
+    const contagem = (o) => (dados.votos && dados.votos[o]) || 0;
+    let corpo;
+    if (jaVotou || aviso) {
+      const maior = Math.max(1, ...v.opcoes.map(contagem));
+      corpo = v.opcoes.map((o) => {
+        const n = contagem(o);
+        const pct = total ? Math.round((n / total) * 100) : 0;
+        const lider = n === maior && n > 0;
+        return `<div class="vote-row${o === jaVotou ? ' mine' : ''}${lider ? ' lead' : ''}">
+            <div class="row" style="justify-content:space-between;gap:8px"><span>${esc(o)}${lider ? ' <small>(na frente)</small>' : ''}${o === jaVotou ? ' <small>(seu voto)</small>' : ''}</span><span>${pct}%</span></div>
+            <div class="bar"><span style="width:${pct}%"></span></div>
+          </div>`;
+      }).join('') + `<p class="vote-note">${esc(aviso || 'Valeu por votar!')} ${total === 1 ? '1 voto' : total + ' votos'} até agora.</p>`;
+    } else {
+      corpo = `<div class="vote-opts">${v.opcoes.map((o) => `<button type="button" class="pill" data-opcao="${esc(o)}">${esc(o)}</button>`).join('')}</div>
+        <p class="vote-note">${total === 1 ? '1 voto' : total + ' votos'} até agora. Um voto por pessoa.</p>`;
+    }
+    el.innerHTML = `<p class="vote-title">${esc(v.pergunta || 'Ajude a escolher o nome!')}</p>${corpo}`;
+    el.hidden = false;
+  }
+
+  function ligarVotacoes(raiz) {
+    $$('[data-vote]', raiz).forEach((el) => {
+      const a = S.animais.find((x) => x.id === el.dataset.vote);
+      if (!a) return;
+      const pronto = votoCache[a.id]
+        ? Promise.resolve(votoCache[a.id])
+        : fetch('/api/votos?bicho=' + encodeURIComponent(a.id)).then((r) => (r.ok ? r.json() : null)).catch(() => null);
+      pronto.then((dados) => {
+        if (!dados) return; // votação ainda não configurada: fica escondida
+        votoCache[a.id] = dados;
+        pintarVoto(el, a, dados);
+      });
+      el.addEventListener('click', (e) => {
+        const b = e.target.closest('[data-opcao]');
+        if (!b || lsGet('ff-voto-' + a.id)) return;
+        $$('[data-opcao]', el).forEach((x) => (x.disabled = true));
+        b.textContent = 'Votando...';
+        fetch('/api/votos', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ bicho: a.id, opcao: b.dataset.opcao }) })
+          .then((r) => r.json().then((j) => ({ status: r.status, j })))
+          .then(({ status, j }) => {
+            if (status === 200 || status === 409) {
+              lsSet('ff-voto-' + a.id, status === 200 ? b.dataset.opcao : (lsGet('ff-voto-' + a.id) || 'sim'));
+              votoCache[a.id] = j;
+              pintarVoto(el, a, j, status === 409 ? j.error : null);
+            } else {
+              pintarVoto(el, a, votoCache[a.id] || { votos: {}, total: 0 });
+              el.insertAdjacentHTML('beforeend', `<p class="error-text">${esc(j.error || 'Não deu pra votar agora.')}</p>`);
+            }
+          })
+          .catch(() => { pintarVoto(el, a, votoCache[a.id] || { votos: {}, total: 0 }); });
+      });
+    });
   }
 
   // ---------- Total do mês (Asaas) ----------
@@ -166,6 +231,7 @@
 
     // Bichos (prévia)
     $('#preview-animais').innerHTML = S.animais.slice(0, 3).map(animalCard).join('');
+    ligarVotacoes($('#preview-animais'));
 
     // Relatório (prévia)
     const r = S.relatorios[0];
@@ -187,6 +253,7 @@
       $$('[data-status]').forEach((b) => b.setAttribute('aria-pressed', String(b.dataset.status === st.status)));
       const list = S.animais.filter((a) => (st.tipo === 'todos' || a.tipo === st.tipo) && (st.status === 'todos' || a.status === st.status));
       grid.innerHTML = list.map(animalCard).join('');
+      ligarVotacoes(grid);
       $('#count').textContent = list.length === 1 ? '1 bichinho' : list.length + ' bichinhos';
       $('#empty').hidden = list.length > 0;
     }

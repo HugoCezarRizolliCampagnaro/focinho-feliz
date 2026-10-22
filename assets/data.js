@@ -6,7 +6,6 @@
 */
 window.SITE = {
   nome: 'Focinho Feliz',
-  cidade: '[sua cidade]',
   instagram: '', // ex: 'focinhofeliz' (sem @)
   whatsapp: '',  // ex: '5549999999999' (com DDI e DDD, só números)
   email: '',     // e-mail de contato do projeto
@@ -31,8 +30,9 @@ window.SITE = {
   // status: 'rec' = em recuperação | 'adocao' = pronto pra adoção | 'adotado'
   // tipo: 'cachorro' | 'gato' | 'outro'
   // foto: caminho da imagem, ex: 'assets/fotos/thor.jpg' (vazio = espaço reservado)
+  // votacao (opcional): { pergunta, opcoes: [...] } + id único (letras minúsculas, números e hífen)
   animais: [
-    { nome: 'Gatinho sem nome (por enquanto)', tipo: 'gato', especie: 'Gato filhote', status: 'adocao', statusLabel: 'Procurando um lar', historia: 'Foi encontrado sozinho na rua, ainda filhote. Hoje está seguro e sendo cuidado, mas ainda precisa de ração e de um lar definitivo. Qualquer valor ajuda a encher o pote dele.', foto: 'assets/fotos/gatinho-sem-nome.jpg' },
+    { id: 'gatinho-sem-nome', votacao: { pergunta: 'Ajude a escolher o nome dele!', opcoes: ['Oreo', 'Frajola', 'Dominó', 'Chico'] }, nome: 'Gatinho sem nome (por enquanto)', tipo: 'gato', especie: 'Gato filhote', status: 'adocao', statusLabel: 'Procurando um lar', historia: 'Foi encontrado sozinho na rua, ainda filhote. Hoje está seguro e sendo cuidado, mas ainda precisa de ração e de um lar definitivo. Qualquer valor ajuda a encher o pote dele.', foto: 'assets/fotos/gatinho-sem-nome.jpg' },
     { nome: 'Ninhada da casinha velha', tipo: 'cachorro', especie: 'Filhotes', status: 'rec', statusLabel: 'Em recuperação', historia: 'Encontramos esses filhotes abandonados numa casinha velha. A mãe não estava por perto, e eles não podiam ficar ali passando frio e fome. No meio deles tinha até um gatinho perdido, que veio junto. Agora estão protegidos, e pra crescerem saudáveis vão precisar de ração de filhote, vermífugo e vacinas.', foto: 'assets/fotos/ninhada-casinha-velha.jpg' }
   ],
 
