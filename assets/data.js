@@ -2,7 +2,7 @@
   DADOS DO SITE — edite aqui sem mexer no resto do código.
 
   ATENÇÃO: tudo abaixo é EXEMPLO. Troque pelos bichos, valores e relatórios
-  reais antes de liberar as doações (antes de colocar a chave do Asaas na Vercel).
+  reais antes de liberar as doações (antes de colocar as chaves da ZuckPay na Vercel).
 */
 window.SITE = {
   nome: 'Focinho Feliz',
@@ -14,7 +14,7 @@ window.SITE = {
   doacaoMensal: false,
   mural: false,
 
-  valorMinimo: 5,
+  valorMinimo: 10, // a ZuckPay pode recusar Pix abaixo de R$ 10
   valores: [10, 25, 50, 100],
   impactos: {
     10: 'ajuda a encher o pote de ração de um bichinho.',

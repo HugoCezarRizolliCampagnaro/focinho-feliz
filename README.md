@@ -1,6 +1,6 @@
 # Focinho Feliz
 
-Site de doações por Pix para bichinhos de rua. HTML/CSS/JS puro + funções serverless da Vercel (`api/`) para o Pix do Asaas.
+Site de doações por Pix para bichinhos de rua. HTML/CSS/JS puro + funções serverless da Vercel (`api/`) para o Pix (ZuckPay; o Asaas fica como reserva).
 
 ## Páginas
 
@@ -25,9 +25,11 @@ Em **Settings → Environment Variables** do projeto na Vercel:
 
 | Nome | Valor |
 |---|---|
-| `ASAAS_API_KEY` | chave de API do Asaas (de teste ou de produção) |
+| `ZUCKPAY_CLIENT_ID` | Client ID da ZuckPay (Desenvolvedores → Credenciais API) |
+| `ZUCKPAY_CLIENT_SECRET` | Client Secret da ZuckPay |
+| `ASAAS_API_KEY` | (reserva) chave do Asaas, só é usada se a ZuckPay não estiver configurada |
 | `ASAAS_SANDBOX` | opcional: `true` força o ambiente de testes. Sem ela, chaves com `_hmlg_` usam o sandbox |
-| `VALOR_MINIMO` | opcional, padrão `5` |
+| `VALOR_MINIMO` | opcional, padrão `10` |
 
 Sem as chaves, o botão de gerar Pix mostra "As doações pelo site abrem em breve".
 Depois de salvar as variáveis, faça um novo deploy (Deployments → Redeploy).

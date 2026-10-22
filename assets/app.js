@@ -155,7 +155,7 @@
     });
   }
 
-  // ---------- Total do mês (Asaas) ----------
+  // ---------- Total do mês (gateway de pagamento) ----------
   // Devolve { mes, total, doacoes } ou null se o resumo não estiver disponível.
   function resumoDoMes(desde) {
     return fetch('/api/resumo' + (desde ? '?desde=' + encodeURIComponent(desde) : ''))
@@ -166,7 +166,7 @@
 
   // ---------- Página inicial ----------
   function initHome() {
-    // Meta: mostra o valor do data.js e depois troca pelo total real do mês, vindo do Asaas
+    // Meta: mostra o valor do data.js e depois troca pelo total real do mês, vindo do gateway
     const m = S.meta;
     function pintarMeta(arrecadado) {
       const pct = Math.min(100, Math.round((arrecadado / Math.max(1, m.valor)) * 100));
@@ -318,7 +318,7 @@
       if (b) { idx = Number(b.dataset.i); render(); }
     });
     render();
-    // O mês em andamento pega "Entrou em doações" direto do Asaas
+    // O mês em andamento pega "Entrou em doações" direto do gateway
     resumoDoMes().then((resumo) => {
       const atual = S.relatorios[0];
       if (!resumo || !atual || !atual.emAndamento || atual.mes.toLowerCase() !== resumo.mes) return;
